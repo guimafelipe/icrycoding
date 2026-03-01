@@ -1,6 +1,9 @@
 use axum::{Router, extract::Path, routing::get};
 use std::fs;
 
+mod posts;
+use crate::posts::*;
+
 async fn about() {
     println!("Fui chamado")
 }
@@ -15,6 +18,13 @@ async fn get_post(Path(title): Path<String>) -> String {
 
 #[tokio::main]
 async fn main() {
+    let binding = get_all_frontmatter();
+    let res = binding.get(0).unwrap();
+
+    let title = res.title.clone();
+
+    println!("{title}");
+
     // build our application with a single route
     let app = Router::new()
         .route("/", get(|| async { "Hello, World!" }))
