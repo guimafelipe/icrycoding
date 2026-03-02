@@ -1,4 +1,6 @@
-use axum::{Router, extract::Path, routing::get};
+use axum::{Router, extract::Path, response::Html, routing::get};
+use std::fs;
+use tower_http::services::ServeDir;
 
 mod posts;
 use crate::posts::*;
@@ -18,8 +20,8 @@ async fn get_post(Path(title): Path<String>) -> String {
     content
 }
 
-async fn get_main_page() -> String {
-    String::from("Hello, world!")
+async fn get_main_page() -> Html<String> {
+    Html(fs::read_to_string("templates/main.html").unwrap())
 }
 
 #[tokio::main]
@@ -28,7 +30,8 @@ async fn main() {
     let app = Router::new()
         .route("/", get(get_main_page))
         .route("/about", get(about))
-        .route("/posts/{title}", get(get_post));
+        .route("/posts/{title}", get(get_post))
+        .nest_service("/styles", ServeDir::new("styles"));
 
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
