@@ -1,9 +1,11 @@
 use axum::{Router, extract::Path, response::Html, routing::get};
 use std::fs;
+use tera::Tera;
 use tower_http::services::ServeDir;
 
 mod posts;
-use crate::posts::*;
+mod render;
+use crate::{posts::*, render::*};
 
 async fn about() {
     println!("Fui chamado")
@@ -21,16 +23,28 @@ async fn get_post(Path(title): Path<String>) -> String {
 }
 
 async fn get_main_page() -> Html<String> {
-    Html(fs::read_to_string("templates/main.html").unwrap())
+    let posts_frontmatter = get_all_frontmatter();
+    let mut posts: Vec<PostData> = vec![];
+
+    for frontmatter in posts_frontmatter {
+        posts.push(PostData {
+            title: frontmatter.title,
+            date: frontmatter.date,
+        });
+    }
+
+    // Html(fs::read_to_string("templates/main.html").unwrap())
+
+    Html(render_main_page(posts))
 }
 
 #[tokio::main]
 async fn main() {
-    // build our application with a single route
     let app = Router::new()
         .route("/", get(get_main_page))
         .route("/about", get(about))
         .route("/posts/{title}", get(get_post))
+        .nest_service("/assets", ServeDir::new("assets"))
         .nest_service("/styles", ServeDir::new("styles"));
 
     // run our app with hyper, listening globally on port 3000
