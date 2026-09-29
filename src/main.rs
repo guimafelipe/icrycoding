@@ -11,9 +11,17 @@ async fn about() {
     println!("Fui chamado")
 }
 
-async fn get_post(Path(title): Path<String>) -> String {
-    let (content, _) = posts::get_post(&title[..]).unwrap();
-    content
+async fn get_post(Path(title): Path<String>) -> Html<String> {
+    let mut tera = Tera::default();
+    tera.load_from_glob("templates/**/*.html").unwrap();
+
+    let (content, metadata) = posts::get_post(&title[..]).unwrap();
+    let post_data = PostData {
+        title: metadata.title,
+        date: metadata.date,
+    };
+
+    Html(render_post_page(&tera, &content, &post_data))
 }
 
 async fn get_main_page() -> Html<String> {
@@ -27,7 +35,7 @@ async fn get_main_page() -> Html<String> {
         });
     }
 
-    Html(render_main_page(posts))
+    Html(render_main_page(&posts))
 }
 
 #[tokio::main]
