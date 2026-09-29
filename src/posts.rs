@@ -8,8 +8,6 @@ pub struct PostMetadata {
 }
 
 fn convert_to_metadata(frontmatter: Frontmatter) -> PostMetadata {
-    let test = frontmatter.get("date").unwrap();
-
     let title = frontmatter.get("title").unwrap();
     let date_str = frontmatter.get("date").unwrap();
 
@@ -49,4 +47,3 @@ pub fn get_all_frontmatter() -> Vec<PostMetadata> {
 
     res
 }
-

@@ -12,12 +12,6 @@ async fn about() {
 }
 
 async fn get_post(Path(title): Path<String>) -> String {
-    /*let posts_path = format!("content/posts/{title}.md");
-    let res = fs::read_to_string(posts_path).unwrap_or("Not found".to_string());
-    println!("{}", res);
-    res
-    */
-
     let (content, _) = posts::get_post(&title[..]).unwrap();
     content
 }
@@ -32,8 +26,6 @@ async fn get_main_page() -> Html<String> {
             date: frontmatter.date,
         });
     }
-
-    // Html(fs::read_to_string("templates/main.html").unwrap())
 
     Html(render_main_page(posts))
 }
