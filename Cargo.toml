@@ -7,6 +7,7 @@ edition = "2024"
 axum = "0.8.8"
 chrono = "0.4.44"
 frontmatter-gen = "0.0.5"
+pulldown-cmark = "0.13.4"
 tera = { version = "2", features = ["glob_fs"] }
 tokio = { version = "1.49.0", features = ["full"] }
 tower-http = { version = "0.6.8", features = ["fs"] }
