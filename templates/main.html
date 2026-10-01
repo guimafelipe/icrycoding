@@ -6,6 +6,11 @@
 		<title>I cry coding</title>
 	</head>
 	<body style="background-color: black; color: white;">
-		<p>Test text</p>
+		{% for fm in frontmatters %}
+		<a href="posts/{{fm.filename}}">
+			<h2>{{ fm.title }}</h2>
+			<p> {{ fm.date }} </p>
+		</a>
+		{% endfor %}
 	</body>
 </html>

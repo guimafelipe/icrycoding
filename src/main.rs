@@ -1,5 +1,4 @@
 use axum::{Router, extract::Path, response::Html, routing::get};
-use std::fs;
 use tera::Tera;
 use tower_http::services::ServeDir;
 
@@ -17,25 +16,30 @@ async fn get_post(Path(title): Path<String>) -> Html<String> {
 
     let (content, metadata) = posts::get_post(&title[..]).unwrap();
     let post_data = PostData {
+        filename: title,
         title: metadata.title,
-        date: metadata.date,
+        date: metadata.date.to_string(),
     };
 
     Html(render_post_page(&tera, &content, &post_data))
 }
 
 async fn get_main_page() -> Html<String> {
+    let mut tera = Tera::default();
+    tera.load_from_glob("templates/**/*.html").unwrap();
+
     let posts_frontmatter = get_all_frontmatter();
     let mut posts: Vec<PostData> = vec![];
 
     for frontmatter in posts_frontmatter {
         posts.push(PostData {
             title: frontmatter.title,
-            date: frontmatter.date,
+            date: frontmatter.date.to_string(),
+            filename: frontmatter.filename,
         });
     }
 
-    Html(render_main_page(&posts))
+    Html(render_main_page(&tera, &posts))
 }
 
 #[tokio::main]
