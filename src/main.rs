@@ -7,8 +7,8 @@ mod posts;
 mod render;
 use crate::{posts::*, render::*};
 
-async fn about() {
-    println!("Fui chamado")
+async fn about(State(tera): State<Arc<Tera>>) -> Html<String> {
+    Html(render_about_page(&tera))
 }
 
 async fn get_post(State(tera): State<Arc<Tera>>, Path(title): Path<String>) -> Html<String> {

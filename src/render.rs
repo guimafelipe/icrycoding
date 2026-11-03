@@ -8,6 +8,11 @@ pub struct PostData {
     pub filename: String,
 }
 
+pub fn render_about_page(tera: &Tera) -> String {
+    let context = Context::new();
+    tera.render("about.html", &context).unwrap()
+}
+
 pub fn render_main_page(tera: &Tera, posts: &Vec<PostData>) -> String {
     let mut res = String::new();
     for post in posts {
