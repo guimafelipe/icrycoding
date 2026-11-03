@@ -43,16 +43,22 @@ async fn main() {
     tera.load_from_glob("templates/**/*.html").unwrap();
 
     let teraref = Arc::new(tera);
-    // I know it is ugly but works for now. Might learn more about
-    // lifetimes to fix it appropiately.
-    let teraref2 = teraref.clone();
 
     let app = Router::new()
-        .route("/", get(|| async { get_main_page(teraref) }))
+        .route(
+            "/",
+            get({
+                let ctera = Arc::clone(&teraref);
+                || async { get_main_page(ctera) }
+            }),
+        )
         .route("/about", get(about))
         .route(
             "/posts/{title}",
-            get(|title| async { get_post(teraref2, title) }),
+            get({
+                let ctera = Arc::clone(&teraref);
+                |title| async { get_post(ctera, title) }
+            }),
         )
         .nest_service("/assets", ServeDir::new("assets"))
         .nest_service("/styles", ServeDir::new("styles"));
