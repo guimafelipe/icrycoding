@@ -1,4 +1,4 @@
-use axum::{Router, extract::Path, response::Html, routing::get};
+use axum::{Router, extract::Path, extract::State, response::Html, routing::get};
 use std::sync::Arc;
 use tera::Tera;
 use tower_http::services::ServeDir;
@@ -11,7 +11,7 @@ async fn about() {
     println!("Fui chamado")
 }
 
-fn get_post(tera: Arc<Tera>, Path(title): Path<String>) -> Html<String> {
+async fn get_post(State(tera): State<Arc<Tera>>, Path(title): Path<String>) -> Html<String> {
     let (content, metadata) = posts::get_post(&title[..]).unwrap();
     let post_data = PostData {
         filename: title,
@@ -22,7 +22,7 @@ fn get_post(tera: Arc<Tera>, Path(title): Path<String>) -> Html<String> {
     Html(render_post_page(&tera, &content, &post_data))
 }
 
-fn get_main_page(tera: Arc<Tera>) -> Html<String> {
+async fn get_main_page(State(tera): State<Arc<Tera>>) -> Html<String> {
     let posts_frontmatter = get_all_frontmatter();
     let mut posts: Vec<PostData> = vec![];
 
@@ -45,21 +45,10 @@ async fn main() {
     let teraref = Arc::new(tera);
 
     let app = Router::new()
-        .route(
-            "/",
-            get({
-                let ctera = Arc::clone(&teraref);
-                || async { get_main_page(ctera) }
-            }),
-        )
+        .route("/", get(get_main_page))
         .route("/about", get(about))
-        .route(
-            "/posts/{title}",
-            get({
-                let ctera = Arc::clone(&teraref);
-                |title| async { get_post(ctera, title) }
-            }),
-        )
+        .route("/posts/{title}", get(get_post))
+        .with_state(teraref)
         .nest_service("/assets", ServeDir::new("assets"))
         .nest_service("/styles", ServeDir::new("styles"));
 
