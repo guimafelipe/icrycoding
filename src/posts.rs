@@ -1,7 +1,6 @@
 use chrono::*;
 use frontmatter_gen::{Frontmatter, extract};
 use std::fs;
-use std::path::Path;
 
 pub struct PostMetadata {
     pub title: String,
