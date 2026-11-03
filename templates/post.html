@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" href="styles/style.css" />
-		<title>I cry coding</title>
-	</head>
-	<body style="background-color: black; color: white;">
-		<h1>{{ title }}</h1>
-		<h2>{{ date }}</h2>
-		<article>
-		{{ content | safe }}
-		</article>
-	</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ title }}</h1>
+<h2>{{ date }}</h2>
+<article>
+	{{ content | safe }}
+</article>
+{% endblock content %}

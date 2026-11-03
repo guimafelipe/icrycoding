@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" href="styles/style.css" />
-		<title>I cry coding</title>
-	</head>
-	<body style="background-color: black; color: white;">
-		{% for fm in frontmatters %}
-		<a href="posts/{{fm.filename}}">
-			<h2>{{ fm.title }}</h2>
-			<p> {{ fm.date }} </p>
-		</a>
-		{% endfor %}
-	</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+{% for fm in frontmatters %}
+<a href="posts/{{fm.filename}}">
+	<h2>{{ fm.title }}</h2>
+	<p> {{ fm.date }} </p>
+</a>
+{% endfor %}
+{% endblock content %}

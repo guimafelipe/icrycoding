@@ -18,7 +18,7 @@ pub fn render_main_page(tera: &Tera, posts: &Vec<PostData>) -> String {
     let mut context = Context::new();
     context.insert("frontmatters", &posts);
 
-    tera.render("base.html", &context).unwrap()
+    tera.render("main.html", &context).unwrap()
 }
 
 pub fn render_post_page(tera: &Tera, content: &String, post_data: &PostData) -> String {
