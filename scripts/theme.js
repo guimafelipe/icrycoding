@@ -1,24 +1,33 @@
-const theme_button = document.querySelector("#tt");
+const str_theme_name = "icc_theme"
+const str_dark = "dark_mode"
 
-console.log("loaded");
-
-theme_button.addEventListener("click", (event) => {
-	console.log("Clicked");
-	document.body.classList.toggle("dark_mode");
-
-	if (document.body.classList.contains("dark_mode")) {
-		localStorage.setItem("icc_theme", "dark");
-	} else {
-		localStorage.setItem("icc_theme", "light");
-	}
-});
-
-const theme = localStorage.getItem("icc_theme");
+const theme = localStorage.getItem(str_theme_name);
+const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
 
 if (theme != null) {
 	if (theme == "dark") {
-		document.body.classList.add("dark_mode");
+		document.body.classList.add(str_dark);
 	} else {
-		document.body.classList.remove("dark_mode");
+		document.body.classList.remove(str_dark);
+	}
+} else {
+	if (darkThemeMq.matches) {
+		document.body.classList.add(str_dark);
+	} else {
+		document.body.classList.remove(str_dark);
 	}
 }
+
+const theme_button = document.querySelector("#tt");
+
+theme_button.addEventListener("click", (event) => {
+	console.log("Clicked");
+	document.body.classList.toggle(str_dark);
+
+	if (document.body.classList.contains(str_dark)) {
+		localStorage.setItem(str_theme_name, "dark");
+	} else {
+		localStorage.setItem(str_theme_name, "light");
+	}
+});
+
