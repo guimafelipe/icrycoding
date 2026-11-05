@@ -1,5 +1,6 @@
 const theme_button = document.querySelector("#tt");
 
+// str_dark and str_theme_name are defined in previous script
 theme_button.addEventListener("click", (event) => {
 	document.querySelector("html").classList.toggle(str_dark);
 
