@@ -50,7 +50,8 @@ async fn main() {
         .route("/posts/{title}", get(get_post))
         .with_state(teraref)
         .nest_service("/assets", ServeDir::new("assets"))
-        .nest_service("/styles", ServeDir::new("styles"));
+        .nest_service("/styles", ServeDir::new("styles"))
+        .nest_service("/scripts", ServeDir::new("scripts"));
 
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();

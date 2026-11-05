@@ -4,10 +4,10 @@
 		<meta charset="utf-8" />
 		<meta name="author" content="Felipe Guimarães"/>
 		<meta name=¨description" content="My personal blog with ideas and thoughts"/>
-		<link rel="stylesheet" href="styles/style.css" />
+		<link rel="stylesheet" href="/styles/style.css" />
 		<title>I cry coding</title>
 	</head>
-	<body style="background-color: black; color: white;">
+	<body>
 		<header>
 			<h1>I cry coding</h1>
 		</header>
@@ -16,6 +16,7 @@
 				<ul>
 					<li><a href="/">Home</a></li>
 					<li><a href="/about">About</a></li>
+					<li><button id="tt">Toggle theme</button></li>
 				</ul>
 			</nav>
 			{% block content %}
@@ -26,4 +27,5 @@
 			<p>Made with craft and love.</p>
 		</footer>
 	</body>
+	<script src="/scripts/theme.js"></script>
 </html>

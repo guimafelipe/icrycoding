@@ -1,3 +1,14 @@
-p {
-	color: red;
+:root {
+	--body-bg: #fff;
+	--text-color: #000;
+}
+
+.dark_mode {
+	--body-bg: #000;
+	--text-color: #fff;
+}
+
+body {
+	color: var(--text-color);
+	background: var(--body-bg);
 }
